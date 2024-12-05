@@ -9,6 +9,7 @@ const csscomb = require('gulp-csscomb')
 const PATH = {
   scssRoot: './assets/scss/style.scss',
   scssFiles: './assets/scss/**/*.scss',
+  scssFolder: './assets/scss',
   htmlFiles: './*.html',
   jsFiles: './assets/js/**/*.js',
   cssRoot: './assets/css'
@@ -21,7 +22,7 @@ function scss() {
 }
 
 function comb() {
-  return src('./assets/scss/**/*.scss').pipe(csscomb('./.csscomb.json')).pipe(dest('./assets/scss'))
+  return src(PATH.scssFiles).pipe(csscomb()).pipe(dest(PATH.scssFolder))
 }
 
 function scssMin() {
@@ -55,3 +56,4 @@ function watchFiles() {
 
 task('scss', series(scss, scssMin))
 task('watch', watchFiles)
+task('comb', comb)

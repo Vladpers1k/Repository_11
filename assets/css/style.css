@@ -1,9 +1,14 @@
-* {
-  margin: 0;
-}
-
 body {
   background-color: black;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  transition: 1s;
+  text-align: center;
+  text-decoration: unset;
+  font-size: 10px;
 }
 @media (min-width: 576px) {
   body .some-class {
@@ -12,9 +17,9 @@ body {
 }
 
 h1 {
-  color: blue;
   display: flex;
   justify-content: center;
   text-align: center;
+  color: blue;
   border-color: red 1px;
 }
