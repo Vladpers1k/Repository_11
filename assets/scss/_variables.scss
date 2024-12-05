@@ -1,0 +1,21 @@
+$font-primary: 'Roboto', sans-serif; // Main font for text
+$font-header: 'Roboto Slab', serif; // Font for headers
+$font-icon: 'FontAwesome'; // Icon font
+$font-size: 16px; // Base font size
+
+$container-width: 1320px; // Maximum container width
+
+$ul: 1380px; // Ultra large (very large screens)
+$xl: 1200px; // Extra large (large screens)
+$lg: 992px; // Large (medium screens)
+$md: 768px; // Medium (tablets)
+$sm: 576px; // Small (mobile devices)
+$xs: 480px; // Extra small (small mobile devices)
+$vs: 420px; // Very small (very small devices)
+$us: 360px; // Ultra small (ultra small devices)
+
+$gap: 20px; // Base gap (20px)
+$gap-sm: $gap * 0.5; // Small gap (10px)
+$gap-md: $gap * 0.75; // Medium gap (15px)
+$gap-lg: $gap * 1.5; // Large gap (30px)
+$gap-xl: $gap * 2; // Extra large gap (40px)

@@ -1,0 +1,23 @@
+@import 'mixins-media-standard';
+
+* {
+  margin: 0;
+}
+
+body {
+  background-color: black;
+
+  @include sm-min() {
+    .some-class {
+      display: none;
+    }
+  }
+}
+
+h1 {
+  color: blue;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  border-color: red 1px;
+}
