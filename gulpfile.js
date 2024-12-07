@@ -5,6 +5,7 @@ const cssnano = require('cssnano')
 const rename = require('gulp-rename')
 const postcss = require('gulp-postcss')
 const csscomb = require('gulp-csscomb')
+const autoprefixer = require('autoprefixer')
 
 const PATH = {
   scssRoot: './assets/scss/style.scss',
@@ -15,8 +16,11 @@ const PATH = {
   cssRoot: './assets/css'
 }
 
-const PLUGINS = [cssnano({ preset: 'default' })]
-
+const PLUGINS = [
+  autoprefixer({
+    overrideBrowserslist: ['> 0.5%', 'last 2 versions', 'not dead']
+  })
+]
 function scss() {
   return src(PATH.scssRoot).pipe(sass().on('error', sass.logError)).pipe(dest(PATH.cssRoot)).pipe(browserSync.stream())
 }
@@ -26,9 +30,11 @@ function comb() {
 }
 
 function scssMin() {
+  const pluginsForMinified = PLUGINS.concat([cssnano({ preset: 'default' })])
+
   return src(PATH.scssRoot)
     .pipe(sass().on('error', sass.logError))
-    .pipe(postcss(PLUGINS))
+    .pipe(postcss(pluginsForMinified))
     .pipe(rename({ suffix: '.min' }))
     .pipe(dest(PATH.cssRoot))
     .pipe(browserSync.stream())

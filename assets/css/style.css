@@ -1,8 +1,13 @@
 body {
+  position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
   background-color: black;
   display: flex;
   text-align: center;
   flex-direction: column;
+  order: 1;
   margin: 0;
   padding: 0;
   transition: 1s;
@@ -14,6 +19,10 @@ body {
   body .some-class {
     display: none;
   }
+}
+
+.test {
+  appearance: none;
 }
 
 h1 {
