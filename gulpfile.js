@@ -25,7 +25,7 @@ const PLUGINS = [
   mqpacker({ sort: sortCSSmq })
 ]
 
-function scss() {
+async function scss() {
   return src(PATH.scssRoot)
     .pipe(sass().on('error', sass.logError))
     .pipe(postcss(PLUGINS))
@@ -33,19 +33,18 @@ function scss() {
     .pipe(browserSync.stream())
 }
 
-function scssDev() {
-  const pluginsForDevMode = []
+async function scssDev() {
+  const pluginsForDevMode = [...PLUGINS]
+  pluginsForDevMode.splice(0, 1)
 
-  return (
-    src(PATH.scssRoot, { sourcemaps: true })
-      .pipe(sass().on('error', sass.logError))
-      // .pipe(postcss(pluginsForDevMode))
-      .pipe(dest(PATH.cssRoot, { sourcemaps: true }))
-      .pipe(browserSync.stream())
-  )
+  return src(PATH.scssRoot, { sourcemaps: true })
+    .pipe(sass().on('error', sass.logError))
+    .pipe(postcss(pluginsForDevMode, { map: true }))
+    .pipe(dest(PATH.cssRoot, { sourcemaps: '.' }))
+    .pipe(browserSync.stream())
 }
 
-function scssMin() {
+async function scssMin() {
   const pluginsForMinified = [...PLUGINS, cssnano({ preset: 'default' })]
 
   return src(PATH.scssRoot)
@@ -56,7 +55,7 @@ function scssMin() {
     .pipe(browserSync.stream())
 }
 
-function comb() {
+async function comb() {
   return src(PATH.scssFiles).pipe(csscomb()).pipe(dest(PATH.scssFolder))
 }
 
