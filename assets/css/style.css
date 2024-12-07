@@ -15,15 +15,6 @@ body {
   text-decoration: unset;
   font-size: 10px;
 }
-@media (min-width: 576px) {
-  body .some-class {
-    display: none;
-  }
-}
-
-.test {
-  appearance: none;
-}
 
 h1 {
   display: flex;
@@ -31,4 +22,16 @@ h1 {
   text-align: center;
   color: blue;
   border-color: red 1px;
+}
+
+@media (min-width: 576px) {
+  body .some-class {
+    display: none;
+  }
+}
+
+@media (max-width: 575.8px) {
+  body .some-class {
+    display: none;
+  }
 }

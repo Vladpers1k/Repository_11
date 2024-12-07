@@ -6,6 +6,8 @@ const rename = require('gulp-rename')
 const postcss = require('gulp-postcss')
 const csscomb = require('gulp-csscomb')
 const autoprefixer = require('autoprefixer')
+const mqpacker = require('css-mqpacker')
+const sortCSSmq = require('sort-css-media-queries')
 
 const PATH = {
   scssRoot: './assets/scss/style.scss',
@@ -18,19 +20,33 @@ const PATH = {
 
 const PLUGINS = [
   autoprefixer({
-    overrideBrowserslist: ['> 0.5%', 'last 2 versions', 'not dead']
-  })
+    overrideBrowserslist: ['> 0.1%', 'last 5 versions', 'ie 10', 'not dead']
+  }),
+  mqpacker({ sort: sortCSSmq })
 ]
+
 function scss() {
-  return src(PATH.scssRoot).pipe(sass().on('error', sass.logError)).pipe(dest(PATH.cssRoot)).pipe(browserSync.stream())
+  return src(PATH.scssRoot)
+    .pipe(sass().on('error', sass.logError))
+    .pipe(postcss(PLUGINS))
+    .pipe(dest(PATH.cssRoot))
+    .pipe(browserSync.stream())
 }
 
-function comb() {
-  return src(PATH.scssFiles).pipe(csscomb()).pipe(dest(PATH.scssFolder))
+function scssDev() {
+  const pluginsForDevMode = []
+
+  return (
+    src(PATH.scssRoot, { sourcemaps: true })
+      .pipe(sass().on('error', sass.logError))
+      // .pipe(postcss(pluginsForDevMode))
+      .pipe(dest(PATH.cssRoot, { sourcemaps: true }))
+      .pipe(browserSync.stream())
+  )
 }
 
 function scssMin() {
-  const pluginsForMinified = PLUGINS.concat([cssnano({ preset: 'default' })])
+  const pluginsForMinified = [...PLUGINS, cssnano({ preset: 'default' })]
 
   return src(PATH.scssRoot)
     .pipe(sass().on('error', sass.logError))
@@ -38,6 +54,10 @@ function scssMin() {
     .pipe(rename({ suffix: '.min' }))
     .pipe(dest(PATH.cssRoot))
     .pipe(browserSync.stream())
+}
+
+function comb() {
+  return src(PATH.scssFiles).pipe(csscomb()).pipe(dest(PATH.scssFolder))
 }
 
 function syncInit() {
@@ -48,18 +68,26 @@ function syncInit() {
   })
 }
 
-function reload(done) {
-  browserSync.reload()
-  done()
+async function reload(done) {
+  await browserSync.reload()
 }
 
 function watchFiles() {
   syncInit()
-  watch(PATH.scssFiles, series(scss, scssMin))
+  watch(PATH.scssFiles, scss)
+  watch(PATH.htmlFiles, reload)
+  watch(PATH.jsFiles, reload)
+}
+
+function watchDevFiles() {
+  syncInit()
+  watch(PATH.scssFiles, scssDev)
   watch(PATH.htmlFiles, reload)
   watch(PATH.jsFiles, reload)
 }
 
 task('scss', series(scss, scssMin))
+task('dev', scssDev)
 task('watch', watchFiles)
+task('watchDev', watchDevFiles)
 task('comb', comb)
